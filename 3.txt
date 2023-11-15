@@ -1,0 +1,15 @@
+// esp32 - light detection like brightness, ldr
+
+int ldr = 2;
+
+void setup(){
+    Serial.begin(9600);
+}
+
+void loop(){
+    // value will from 0 to 4095
+    int value = analogRead(ldr);
+    // value = value * (3300.0 / 4096.0);
+    Serial.println(value);
+    delay(500);
+}

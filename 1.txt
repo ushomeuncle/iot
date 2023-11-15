@@ -1,0 +1,19 @@
+// esp32 - ir, pir with led
+
+int ir = 3, led = 2;
+
+void setup(){
+    Serial.begin(9600);
+    pinMode(ir, INPUT);
+    pinMode(led, OUTPUT);
+}
+
+void loop(){
+    int status = digitalRead(ir);
+    if(status == 0){
+        digitalWrite(led,HIGH);
+        Serial.println("detected);
+    } else{
+        digitalWrite(led,LOW);
+    }
+}

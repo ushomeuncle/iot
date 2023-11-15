@@ -1,0 +1,30 @@
+# rpi - led, ir, pir, buzzer
+
+import RPi.GPIO as GPIO
+import time
+
+led=2
+ir=3
+buz=4
+motor=5
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(led, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(ir, GPIO.IN)
+GPIO.setup(buz, GPIO.OUT)
+GPIO.setup(motor, GPIO.OUT)
+
+while(1):
+    if GPIO.input(ir)==0:
+        GPIO.output(led, GPIO.HIGH)
+        GPIO.output(buz, True)
+        time.sleep(1)
+        GPIO.output(buz, False)
+        GPIO.output(motor, GPIO.HIGH)
+    else
+        GPIO.output(led, GPIO.LOW)
+    
+    # looks for ctrl+c
+    expect KeyboardInterrupt: 
+        GPIO.cleanup()

@@ -1,0 +1,31 @@
+# Rpi - camera, and capture
+
+import RPi.GPIO as GPIO
+import time
+from picamera import PiCamera
+
+pin = 2
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(pin,GPIO.IN)
+cam = picamera.PiCamera()
+
+while(1):
+    if GPIO.input(pin):
+        cam.start_preview()
+        cam.resolution = (1024,720)
+        cam.brightness = 50
+        cam.annotate_test = "Hi how"
+        time.sleep(1)
+        cam.capture("/home/1.jpg", resize=(720,480))
+
+        for i in range(5):
+            sleep(5)
+            cam.capture("/home/1/%s.jpg",i)
+
+        cam.stop_preview()
+        break
+    else:
+        cam.stop_preview()
+
+GPIO.cleanup()

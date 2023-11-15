@@ -1,0 +1,47 @@
+// Mutual exclusion - semaphore
+
+SemaphoreHandle_t semvar;
+
+void setup() {
+    Serial.begin(115200);
+    if ( semvar == NULL ){
+        semvar = xSemaphoreCreateBinary(); // Create a binary semaphore
+        if ( ( semvar ) != NULL )
+            xSemaphoreGive(( semvar));
+    }
+    xTaskCreate(TaskLed, "Led", 10000, NULL, 1, NULL );
+    xTaskCreate(TaskBlink, "LedBlink", 10000, NULL, 1, NULL );
+}
+
+void loop() {}
+
+void TaskLed(void *pvParameters){
+    Serial.println("inside taskled");
+    pinMode(8, OUTPUT);
+    for(;;){
+        if ( xSemaphoreTake( semvar, ( TickType_t ) 5 ) == pdTRUE ){
+            Serial.println("semaphore taken inside taskled");
+            digitalWrite(8,HIGH);
+            delay(5000);
+            xSemaphoreGive(semvar);
+        } else{
+            digitalWrite(8,LOW);
+        }
+    }
+}
+
+void TaskBlink(void *pvParameters){
+    Serial.println("inside taskblink");
+    pinMode(7, OUTPUT);
+    for(;;){
+        if (xSemaphoreTake(semvar, ( TickType_t ) 10 ) == pdTRUE) {
+            Serial.println("semaphore taken inside taskblink");
+            digitalWrite(7,HIGH);
+            delay(5000);
+            xSemaphoreGive(semvar);
+            delay(1000);
+        } else{
+            digitalWrite(7,LOW);
+        }
+    }
+}

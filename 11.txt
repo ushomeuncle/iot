@@ -1,0 +1,48 @@
+# Rpi, ESP32 - MQTT
+
+* Open a terminal and run : ifconfig
+* Note the ip address in wlan0 section (Eg 172.168.134.35)
+* sudo apt install mosquitto mosquitto-clients
+* sudo systemctl status mosquito
+* sudo systemctl enable mosquitto.service
+* sudo nano /etc/mosquitto/mosquitto.conf
+listener 1883
+allow_anonymous true
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+const char* ssid = ”xyz”;
+const char* password =”24234234”;
+const char* mqtt_server = “192.168.115.211”;
+char* tempString = “500”;
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+    Serial.begin(115200);
+    WiFi.begin(ssid, password);
+    Serial.println(“Connecting”);
+    while(WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(“,”);
+    }
+    Serial.println(“”);
+    Serial.print(“Connected to WiFi network with IP Address: “);
+    Serial.println(WiFi.localIP());
+    client.setServer(mqtt_server, 1883);
+    // Checking MQTT
+    while (!client.connected()) {
+        Serial.println(“Connecting to MQTT…”);
+        if (client.connect(“espClient”)) {
+            Serial.println(“connected”);
+        } else {
+            Serial.print(”failed with state “);
+            Serial.print(client.state());
+            delay(2000); 
+        }
+    } 
+}
+
+void loop(){
+    client.publish(“ESP32/Temperaturedataread “,tempString ); 
+}

@@ -1,0 +1,15 @@
+// esp 32 - temprature, lm35
+
+int lm = 2
+
+void setup(){
+    Serial.begin(9600);
+    pinMode(lm,INPUT);
+}
+
+void loop(){
+    int value = analogRead(lm);
+    float tempC = (value * (3300.0 / 4096.0)) * 10;
+    float tempF = (tempC * 9/5) + 32
+    Serial.println(tempF)
+}

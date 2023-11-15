@@ -1,0 +1,14 @@
+# RPi - picamera recording
+# omxplayer video_name
+
+import picamera from PiCamera
+import time
+
+cam = picamera.PiCamera()
+cam.resolution = (1023, 720)
+
+cam.start_recording("/home/asd.h264")
+cam.wait_recording(20)
+cam.stop_recording()
+cam.close()
+

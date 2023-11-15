@@ -1,0 +1,17 @@
+// esp32 - temprature, humiditiy, dht11
+
+#include "DHT.h"
+
+int pin = 12
+
+DHT dht(pin, DHT11);
+
+void setup(){
+    Serial.begin(9600);
+    dht.begin();
+}
+
+void loop(){
+    int temp = dht.readTemperature();
+    int humd = dht.readHumidity();
+}
